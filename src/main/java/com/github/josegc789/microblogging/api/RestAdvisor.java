@@ -1,15 +1,11 @@
 package com.github.josegc789.microblogging.api;
 
+import com.github.josegc789.microblogging.core.domain.BadPublicationException;
 import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
-
-import com.github.josegc789.microblogging.core.BadNewPostException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,8 +36,8 @@ public class RestAdvisor {
         .body(toDetail(ex, HttpStatus.INTERNAL_SERVER_ERROR));
   }
 
-  @ExceptionHandler(BadNewPostException.class)
-  public ResponseEntity<ProblemDetail> handleBadRequest(BadNewPostException ex) {
+  @ExceptionHandler(BadPublicationException.class)
+  public ResponseEntity<ProblemDetail> handleBadRequest(BadPublicationException ex) {
     return ResponseEntity.badRequest().body(toDetail(ex, ex.getErrors(), HttpStatus.BAD_REQUEST));
   }
 

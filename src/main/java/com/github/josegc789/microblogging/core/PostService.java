@@ -1,5 +1,9 @@
 package com.github.josegc789.microblogging.core;
 
+import com.github.josegc789.microblogging.core.domain.BadPublicationException;
+import com.github.josegc789.microblogging.core.domain.ExistingPublication;
+import com.github.josegc789.microblogging.core.domain.NewPublication;
+import com.github.josegc789.microblogging.core.domain.Publication;
 import com.github.josegc789.microblogging.spi.PostSpi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,13 +18,26 @@ public class PostService implements MicroBlogging {
   private final PostSpi postSpi;
 
   @Override
-  public NewPost post(NewPost post) {
-    validateFailing(post);
-    return post.withId(postSpi.publish(post));
+  public Publication publish(NewPublication publication) {
+    validateFailing(publication);
+    String id = postSpi.publish(publication);
+    return Publication.builder()
+        .id(id)
+        .owner(publication.owner())
+        .content(publication.content())
+        .build();
   }
 
-  private void validateFailing(NewPost content) {
+  @Override
+  public void unpublish(String owner, String id) {
+    ExistingPublication publication = ExistingPublication.from(owner, id);
+    validateFailing(publication);
+    postSpi.unpublish(publication);
+  }
+
+  private <T> void validateFailing(T content) {
     Errors errors = validator.validateObject(content);
-    errors.failOnError(_ -> new BadNewPostException("New post is not correct", null, errors));
+    errors.failOnError(
+        _ -> new BadPublicationException("Publication is not correct", null, errors));
   }
 }
