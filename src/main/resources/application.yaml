@@ -1,0 +1,14 @@
+spring:
+  threads:
+    virtual:
+      enabled: true
+  application:
+    name: microblogging
+  mongodb:
+    uuid-representation: standard
+    host: ${DB_HOST:localhost}
+    port: ${DB_PORT:27017}
+    database: ${DB_NAME:microblogging}
+    username: ${DB_USER:admin}
+    password: ${DB_PWD:password}
+    authentication-database: ${DB_AUTH:admin}

@@ -1,0 +1,54 @@
+buildscript {
+    ext {
+        springVer = "4.0.1"
+        lombokVer = "1.18.42"
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version "${springVer}"
+}
+
+group = 'com.github.josegc789'
+version = '0.0.1-SNAPSHOT'
+description = 'Micro blogging app like twitter'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:${springVer}"))
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-mongodb-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-test'
+    compileOnly "org.projectlombok:lombok:${lombokVer}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVer}"
+}
+
+/*
+extraJavaModuleInfo {
+    failOnMissingModuleInfo = false
+}
+ */
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
