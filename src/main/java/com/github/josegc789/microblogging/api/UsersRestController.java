@@ -3,6 +3,7 @@ package com.github.josegc789.microblogging.api;
 import com.github.josegc789.microblogging.core.Followers;
 import com.github.josegc789.microblogging.core.Users;
 import com.github.josegc789.microblogging.core.domain.Follow;
+import com.github.josegc789.microblogging.core.domain.NewFollow;
 import com.github.josegc789.microblogging.core.domain.SignInUser;
 import com.github.josegc789.microblogging.core.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,8 @@ public class UsersRestController {
     return ResponseEntity.ok(users.signIn(signInUser));
   }
 
-  @PutMapping("{follower}/users/{followee}/follow")
-  public ResponseEntity<Follow> follow(
-      @PathVariable("follower") String follower, @PathVariable("followee") String followee) {
-    return ResponseEntity.ok(followers.follow(follower, followee));
+  @PutMapping("/users/follow")
+  public ResponseEntity<Follow> follow(@RequestBody NewFollow follow) {
+    return ResponseEntity.ok(followers.follow(follow));
   }
 }

@@ -17,12 +17,11 @@ public class FollowService implements Followers {
   private final DomainValidator validator;
 
   @Override
-  public Follow follow(String follower, String followee) {
-    NewFollow newFollower = NewFollow.builder().follower(follower).followee(followee).build();
+  public Follow follow(NewFollow newFollower) {
     validator.peekFollow(newFollower);
     return Follow.builder()
-        .follower(users.search(follower))
-        .followee(users.search(followee))
+        .follower(users.search(newFollower.follower()))
+        .followee(users.search(newFollower.followee()))
         .id(
             followerSpi
                 .follow(newFollower)

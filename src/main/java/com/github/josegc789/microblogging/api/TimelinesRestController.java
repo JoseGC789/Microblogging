@@ -23,9 +23,9 @@ public class TimelinesRestController {
 
   private final Timelines timelines;
 
-  @GetMapping("/timelines/{owner}")
+  @GetMapping("/timelines")
   public ResponseEntity<List<Timeline>> getTimeline(
-      @PathVariable("owner") String owner,
+      @RequestParam("owner") String owner,
       @RequestParam(value = "cursor", required = false)
           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
           ZonedDateTime cursor) {
