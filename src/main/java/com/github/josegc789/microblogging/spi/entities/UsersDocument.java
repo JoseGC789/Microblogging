@@ -1,6 +1,5 @@
 package com.github.josegc789.microblogging.spi.entities;
 
-import java.time.Instant;
 import lombok.Builder;
 import lombok.Value;
 import org.springframework.data.annotation.CreatedBy;
@@ -10,13 +9,17 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "publications")
+import java.time.Instant;
+
+@Document(collection = "users")
 @Value
 @Builder
-public class PublicationDocument {
+public class UsersDocument {
   @Id String id;
-  String content;
-  @CreatedBy @Indexed String createdBy;
-  @CreatedDate Instant createdOn;
+
+  @Indexed(unique = true)
+  String username;
+
+  @CreatedBy @CreatedDate Instant createdOn;
   @LastModifiedDate Instant updatedOn;
 }

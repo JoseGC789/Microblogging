@@ -4,4 +4,6 @@ import com.github.josegc789.microblogging.spi.entities.FollowerDocument;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface SpringDataMongoFollowersRepository
-    extends MongoRepository<FollowerDocument, String> {}
+    extends MongoRepository<FollowerDocument, String> {
+  boolean existsByFollowerAndFollowee(String follower, String followee);
+}

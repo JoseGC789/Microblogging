@@ -1,25 +1,27 @@
-package com.github.josegc789.microblogging.spi;
+package com.github.josegc789.microblogging.spi.services;
 
 import com.github.josegc789.microblogging.core.domain.ExistingPublication;
 import com.github.josegc789.microblogging.core.domain.NewPublication;
+import com.github.josegc789.microblogging.spi.PublicationsSpi;
+import com.github.josegc789.microblogging.spi.UsersSpi;
 import com.github.josegc789.microblogging.spi.entities.PublicationDocument;
 import com.github.josegc789.microblogging.spi.repositories.SpringDataMongoPublicationsRepository;
 import java.time.ZonedDateTime;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class SpringDataMongoPostService implements PostSpi {
+public class SpringDataMongoPublicationService implements PublicationsSpi {
 
   private final SpringDataMongoPublicationsRepository repository;
 
   @Override
-  public String publish(NewPublication newPublication) {
+  @Transactional
+  public String create(NewPublication newPublication) {
     PublicationDocument toSave =
         PublicationDocument.builder()
-            .id(UUID.randomUUID().toString())
             .createdBy(newPublication.owner())
             .createdOn(ZonedDateTime.now().toInstant())
             .content(newPublication.content())
@@ -29,7 +31,7 @@ public class SpringDataMongoPostService implements PostSpi {
   }
 
   @Override
-  public void unpublish(ExistingPublication toDelete) {
+  public void delete(ExistingPublication toDelete) {
     repository.deleteByCreatedByAndId(toDelete.owner(), toDelete.id());
   }
 }

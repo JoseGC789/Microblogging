@@ -2,10 +2,13 @@ package com.github.josegc789.microblogging.api;
 
 import com.github.josegc789.microblogging.core.domain.BadPublicationException;
 import java.net.URI;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
+
+import com.github.josegc789.microblogging.core.domain.BadUserException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,7 +26,7 @@ public class RestAdvisor {
   private static final Supplier<String> GENERIC = () -> UUID.randomUUID().toString();
 
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<ProblemDetail> handleRuntimeException(Exception ex) {
+  public ResponseEntity<ProblemDetail> handleException(Exception ex) {
     log.error("Internal Error {}", ex.getMessage());
     return ResponseEntity.internalServerError()
         .body(toDetail(ex, HttpStatus.INTERNAL_SERVER_ERROR));
@@ -41,9 +44,17 @@ public class RestAdvisor {
     return ResponseEntity.badRequest().body(toDetail(ex, ex.getErrors(), HttpStatus.BAD_REQUEST));
   }
 
+  @ExceptionHandler(BadUserException.class)
+  public ResponseEntity<ProblemDetail> handleBadRequest(BadUserException ex) {
+    return ResponseEntity.badRequest().body(toDetail(ex, ex.getErrors(), HttpStatus.BAD_REQUEST));
+  }
+
   private ProblemDetail toDetail(Exception ex, Errors errors, HttpStatus status) {
     ProblemDetail detail = toDetail(ex, status);
-    detail.setProperties(Map.of("errors", errors.getAllErrors()));
+    detail.setProperties(
+        Map.of(
+            "errors",
+            Optional.ofNullable(errors).map(Errors::getAllErrors).orElse(Collections.emptyList())));
     return detail;
   }
 
