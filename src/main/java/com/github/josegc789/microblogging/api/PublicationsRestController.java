@@ -24,9 +24,9 @@ public class PublicationsRestController {
     return ResponseEntity.ok(publications.publish(newPublication));
   }
 
-  @DeleteMapping("/{owner}/publications/{id}")
+  @DeleteMapping("/{authorId}/publications/{id}")
   public ResponseEntity<Void> delete(
-      @PathVariable("owner") String owner, @PathVariable("id") String id) {
+      @PathVariable("authorId") String owner, @PathVariable("id") String id) {
     publications.unpublish(owner, id);
     return ResponseEntity.noContent().build();
   }

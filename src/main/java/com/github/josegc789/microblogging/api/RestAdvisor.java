@@ -28,12 +28,14 @@ public class RestAdvisor {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ProblemDetail> handleException(Exception ex) {
     log.error("Internal Error {}", ex.getMessage());
+    ex.printStackTrace();
     return ResponseEntity.internalServerError()
         .body(toDetail(ex, HttpStatus.INTERNAL_SERVER_ERROR));
   }
 
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<ProblemDetail> handleRuntimeException(RuntimeException ex) {
+    ex.printStackTrace();
     log.error("Internal Error {}", ex.getMessage());
     return ResponseEntity.internalServerError()
         .body(toDetail(ex, HttpStatus.INTERNAL_SERVER_ERROR));

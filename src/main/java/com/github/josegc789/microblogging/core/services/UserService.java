@@ -25,9 +25,6 @@ public class UserService implements Users {
 
   @Override
   public User search(String id) {
-    return usersSpi
-        .find(id)
-        .map(user -> new User(user.getId(), user.getUsername()))
-        .orElseThrow(() -> new BadUserException("User doesn't exist", null));
+    return usersSpi.find(id).orElseThrow(() -> new BadUserException("User doesn't exist", null));
   }
 }

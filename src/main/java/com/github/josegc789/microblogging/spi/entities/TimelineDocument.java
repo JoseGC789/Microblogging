@@ -3,25 +3,24 @@ package com.github.josegc789.microblogging.spi.entities;
 import java.time.Instant;
 import lombok.Builder;
 import lombok.Value;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "publications")
+@Document(collection = "timelines")
 @Value
 @Builder
 @CompoundIndexes({
-  @CompoundIndex(name = "by_author_date", def = "{'authorId': 1, 'createdOn': -1}"),
-  @CompoundIndex(name = "by_date", def = "{'createdOn': -1}")
+  @CompoundIndex(name = "by_owner_date", def = "{'owner': 1, 'createdOn': -1}"),
+  @CompoundIndex(name = "by_authorId_date", def = "{'authorId': 1, 'createdOn': -1}")
 })
-public class PublicationDocument {
+public class TimelineDocument {
   @Id String id;
-  String content;
-  String authorUsername;
+  String owner;
+  String publicationId;
   String authorId;
-  @CreatedDate Instant createdOn;
-  @LastModifiedDate Instant updatedOn;
+  String authorUsername;
+  String content;
+  Instant createdOn;
 }

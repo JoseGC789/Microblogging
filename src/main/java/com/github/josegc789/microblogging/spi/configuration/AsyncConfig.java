@@ -1,0 +1,17 @@
+package com.github.josegc789.microblogging.spi.configuration;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
+
+@Configuration
+@EnableAsync
+public class AsyncConfig {
+  @Bean(name = "virtualThreadExecutor")
+  public Executor virtualThreadExecutor() {
+    // Creates an executor that spawns a new virtual thread per task.
+    return Executors.newVirtualThreadPerTaskExecutor();
+  }
+}

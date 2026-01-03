@@ -2,11 +2,13 @@ package com.github.josegc789.microblogging.spi.services;
 
 import com.github.josegc789.microblogging.core.domain.ExistingPublication;
 import com.github.josegc789.microblogging.core.domain.NewPublication;
+import com.github.josegc789.microblogging.core.domain.User;
 import com.github.josegc789.microblogging.spi.PublicationsSpi;
-import com.github.josegc789.microblogging.spi.UsersSpi;
 import com.github.josegc789.microblogging.spi.entities.PublicationDocument;
 import com.github.josegc789.microblogging.spi.repositories.SpringDataMongoPublicationsRepository;
 import java.time.ZonedDateTime;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,22 +18,30 @@ import org.springframework.transaction.annotation.Transactional;
 public class SpringDataMongoPublicationService implements PublicationsSpi {
 
   private final SpringDataMongoPublicationsRepository repository;
+  private final SimpleAsyncTimelineService timelineService;
 
   @Override
   @Transactional
-  public String create(NewPublication newPublication) {
+  public String create(NewPublication newPublication, User author) {
     PublicationDocument toSave =
         PublicationDocument.builder()
-            .createdBy(newPublication.owner())
+            .authorUsername(author.username())
+            .authorId(author.id())
             .createdOn(ZonedDateTime.now().toInstant())
             .content(newPublication.content())
             .build();
-    PublicationDocument entity = repository.save(toSave);
-    return entity.getId();
+    PublicationDocument saved = repository.save(toSave);
+    timelineService.distribute(saved);
+    return saved.getId();
+  }
+
+  @Override
+  public List<PublicationDocument> find(List<String> publications) {
+    return repository.findAllById(publications);
   }
 
   @Override
   public void delete(ExistingPublication toDelete) {
-    repository.deleteByCreatedByAndId(toDelete.owner(), toDelete.id());
+    repository.deleteByAuthorIdAndId(toDelete.owner(), toDelete.id());
   }
 }

@@ -5,4 +5,4 @@ import lombok.With;
 
 @With
 @Builder
-public record Publication(String id, User owner, String content) {}
+public record Publication(String id, User author, String content) {}

@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 @EnableMongoAuditing
 public class MicrobloggingApplication {
 
-  public static void main(String[] args) {
+  static void main(String[] args) {
     SpringApplication.run(MicrobloggingApplication.class, args);
   }
 }

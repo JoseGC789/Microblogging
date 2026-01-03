@@ -4,7 +4,11 @@ spring:
       enabled: true
   application:
     name: microblogging
+  data:
+    mongodb:
+      auto-index-creation: true
   mongodb:
+    auto-index-creation: true
     uuid-representation: standard
     host: ${DB_HOST:localhost}
     port: ${DB_PORT:27017}
@@ -12,3 +16,15 @@ spring:
     username: ${DB_USER:admin}
     password: ${DB_PWD:password}
     authentication-database: ${DB_AUTH:admin}
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
+
+app:
+  popular-follower-threshold: ${POPULAR_FOLLOWER_THRESHOLD:10}

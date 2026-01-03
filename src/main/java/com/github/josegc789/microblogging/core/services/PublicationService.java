@@ -21,9 +21,9 @@ public class PublicationService implements Publications {
   @Override
   public Publication publish(NewPublication publication) {
     validator.peekPublication(publication);
-    User user = users.search(publication.owner());
-    String id = publicationsSpi.create(publication);
-    return Publication.builder().id(id).owner(user).content(publication.content()).build();
+    User user = users.search(publication.authorId());
+    String id = publicationsSpi.create(publication, user);
+    return Publication.builder().id(id).author(user).content(publication.content()).build();
   }
 
   @Override
