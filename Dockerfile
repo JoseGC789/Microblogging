@@ -3,6 +3,7 @@ WORKDIR /home/app
 COPY build.gradle settings.gradle gradlew ./
 COPY gradle ./gradle
 COPY src ./src
+COPY lombok.config ./lombok.config
 RUN ./gradlew clean build --no-daemon
 
 FROM eclipse-temurin:25-jre-alpine

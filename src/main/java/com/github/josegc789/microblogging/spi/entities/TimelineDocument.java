@@ -13,7 +13,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @CompoundIndexes({
   @CompoundIndex(name = "by_owner_date", def = "{'owner': 1, 'createdOn': -1}"),
-  @CompoundIndex(name = "by_authorId_date", def = "{'authorId': 1, 'createdOn': -1}")
+  @CompoundIndex(name = "by_authorId_date", def = "{'authorId': 1, 'createdOn': -1}"),
+  @CompoundIndex(
+      name = "by_authorId_publicationId_date",
+      def = "{'authorId': 1, 'publicationId': 1, 'createdOn': -1}")
 })
 public class TimelineDocument {
   @Id String id;

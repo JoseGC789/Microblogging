@@ -8,6 +8,7 @@ buildscript {
 plugins {
     id 'java'
     id 'org.springframework.boot' version "${springVer}"
+    id 'info.solidsoft.pitest' version '1.19.0-rc.2'
 }
 
 group = 'com.github.josegc789'
@@ -36,6 +37,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-kafka'
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-mongodb-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-test'
@@ -43,11 +45,10 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVer}"
 }
 
-/*
-extraJavaModuleInfo {
-    failOnMissingModuleInfo = false
+pitest {
+    junit5PluginVersion = '1.2.3'
+    reportDir = file('./build/reports/pit-reports')
 }
- */
 
 tasks.named('test') {
     useJUnitPlatform()

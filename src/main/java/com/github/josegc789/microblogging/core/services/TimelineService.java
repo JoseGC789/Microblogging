@@ -15,11 +15,11 @@ public class TimelineService implements Timelines {
 
   @Override
   public List<Timeline> search(String owner, Instant date) {
-    return timelinesSpi.find(owner, 10, date);
+    return timelinesSpi.find(owner, 100, date);
   }
 
   @Override
   public List<Timeline> search(String owner) {
-    return timelinesSpi.find(owner, 10);
+    return timelinesSpi.find(owner, 100);
   }
 }

@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class AsyncConfig {
   @Bean(name = "virtualThreadExecutor")
   public Executor virtualThreadExecutor() {
-    // Creates an executor that spawns a new virtual thread per task.
     return Executors.newVirtualThreadPerTaskExecutor();
   }
 }

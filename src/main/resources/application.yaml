@@ -16,15 +16,34 @@ spring:
     username: ${DB_USER:admin}
     password: ${DB_PWD:password}
     authentication-database: ${DB_AUTH:admin}
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+    consumer:
+      bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+      group-id: ${KAFKA_CONSUMER_GROUP:timeline-workers}
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+
+app:
+  fan-out-write-threshold: ${FAN_OUT_WRITE_THRESHOLD:1000}
+  kafka:
+    topic-publications: ${APP_KAFKA_TOPIC_PUBLICATIONS:publications}
+    topic-publication-deletes: ${APP_KAFKA_TOPIC_PUBLICATION_DELETES:publication-deletes}
+  timeline:
+    default-limit: ${APP_TIMELINE_DEFAULT_LIMIT:20}
+    max-limit: ${APP_TIMELINE_MAX_LIMIT:200}
 
 logging:
   level:
-    org:
-      springframework:
-        data:
-          mongodb:
-            core:
-              MongoTemplate: DEBUG
-
-app:
-  popular-follower-threshold: ${POPULAR_FOLLOWER_THRESHOLD:10}
+    root: INFO
+    org.springframework.kafka: INFO
+    com.github.josegc789.microblogging: DEBUG

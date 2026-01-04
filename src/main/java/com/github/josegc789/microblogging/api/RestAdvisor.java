@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 import com.github.josegc789.microblogging.core.domain.BadUserException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -27,15 +28,15 @@ public class RestAdvisor {
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ProblemDetail> handleException(Exception ex) {
-    log.error("Internal Error {}", ex.getMessage());
-    ex.printStackTrace();
-    return ResponseEntity.internalServerError()
-        .body(toDetail(ex, HttpStatus.INTERNAL_SERVER_ERROR));
+    return handleNonDomain(ex);
   }
 
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<ProblemDetail> handleRuntimeException(RuntimeException ex) {
-    ex.printStackTrace();
+    return handleNonDomain(ex);
+  }
+
+  private @NonNull ResponseEntity<ProblemDetail> handleNonDomain(Exception ex) {
     log.error("Internal Error {}", ex.getMessage());
     return ResponseEntity.internalServerError()
         .body(toDetail(ex, HttpStatus.INTERNAL_SERVER_ERROR));

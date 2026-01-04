@@ -10,8 +10,7 @@ public interface SpringDataMongoPublicationsRepository
     extends MongoRepository<PublicationDocument, String> {
   void deleteByAuthorIdAndId(String authorId, String id);
 
-  List<PublicationDocument> findByAuthorIdInOrderByCreatedOnDesc(
-      List<String> authorId, Pageable pageable);
+  List<PublicationDocument> findByAuthorIdOrderByCreatedOnDesc(String authorId, Pageable pageable);
 
   List<PublicationDocument> findByAuthorIdInAndCreatedOnLessThanOrderByCreatedOnDesc(
       List<String> authorId, Instant createdOn, Pageable pageable);
