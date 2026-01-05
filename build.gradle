@@ -21,14 +21,23 @@ java {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    intTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
-}
-
-repositories {
-    mavenCentral()
+    intTestImplementation.extendsFrom testImplementation
+    intTestRuntimeOnly.extendsFrom testRuntimeOnly
 }
 
 dependencies {
@@ -43,6 +52,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-test'
     compileOnly "org.projectlombok:lombok:${lombokVer}"
     annotationProcessor "org.projectlombok:lombok:${lombokVer}"
+    intTestImplementation 'org.testcontainers:junit-jupiter:1.18.3'
+    intTestImplementation 'org.testcontainers:mongodb:1.18.3'
+    intTestImplementation 'org.testcontainers:kafka:1.21.4'
 }
 
 pitest {
@@ -52,4 +64,10 @@ pitest {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.register('intTest', Test) {
+    useJUnitPlatform()
+    setTestClassesDirs(sourceSets.intTest.output)
+    setClasspath(sourceSets.intTest.runtimeClasspath)
 }
