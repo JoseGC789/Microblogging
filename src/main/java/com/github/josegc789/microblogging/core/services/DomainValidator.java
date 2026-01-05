@@ -10,7 +10,6 @@ import java.util.function.Function;
 
 import com.github.josegc789.microblogging.core.domain.SignInUser;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

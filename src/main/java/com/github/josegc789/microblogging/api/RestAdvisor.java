@@ -1,17 +1,15 @@
 package com.github.josegc789.microblogging.api;
 
 import com.github.josegc789.microblogging.core.domain.BadPublicationException;
+import com.github.josegc789.microblogging.core.domain.BadUserException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
-
-import com.github.josegc789.microblogging.core.domain.BadUserException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +34,7 @@ public class RestAdvisor {
     return handleNonDomain(ex);
   }
 
-  private @NonNull ResponseEntity<ProblemDetail> handleNonDomain(Exception ex) {
+  private ResponseEntity<ProblemDetail> handleNonDomain(Exception ex) {
     log.error("Internal Error {}", ex.getMessage());
     return ResponseEntity.internalServerError()
         .body(toDetail(ex, HttpStatus.INTERNAL_SERVER_ERROR));
